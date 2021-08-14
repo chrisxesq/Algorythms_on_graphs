@@ -1,25 +1,40 @@
 import sys
 def negative_cycle(adj, cost):
 
-    longest = []
-    for item in cost:
-        longest.extend(item)
+    inf = 0 
+    for i in cost:
+        for j in i:
+            if j>0:
+                inf += j
+    inf += 1
 
-    inf=sum(longest)+1
     dist = [inf for i in adj]
     prev = [-1  for i in adj]
-    dist[0]==0
+    changed=0
+    dist[0]=0
+    #print(range(len(adj)))
     for u in range(len(adj)):
-        for i, v in enumerate(adj[u]):
-            if dist[v] > dist[u] + cost[u][i]:
-                dist[v] = dist[u] + cost[u][i]
+        if len(adj[u])==0:
+            pass
+        else:
+            for i, v in enumerate(adj[u]):
+                #print('i,v:',i,v)
+                #print(dist,dist[u],cost[u][i])
+                if dist[v] > dist[u] + cost[u][i]:
+                    dist[v] = dist[u] + cost[u][i]
     dist1=dist[:]
     for u in range(len(adj)):
-        
-        for i, v in enumerate(adj[u]):
-            if dist[v] > dist[u] + cost[u][i]:
-                #dist[v] = dist[u] + cost[u][i]
-                return 1      
+        if len(adj[u])==0:
+            pass
+        else:            
+            for i, v in enumerate(adj[u]):
+                if dist[v] > dist[u] + cost[u][i]:
+                    dist[v] = dist[u] + cost[u][i]
+                    changed +=1
+        if dist[v] > dist[u] + cost[u][i]:
+            return 1
+        else:
+            i += 1
 
     return 0
 
@@ -44,5 +59,3 @@ if __name__ == '__main__':
         adj[a - 1].append(b - 1)
         cost[a - 1].append(w)
     print(negative_cycle(adj, cost))
-
-
